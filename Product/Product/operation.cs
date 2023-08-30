@@ -89,26 +89,12 @@ namespace ProductReviewManagement
         }
         public void AddvaluesinTableList(List<product> list)
         {
-            table.Columns.Add("ProductId").DataType = typeof(Int32);
-            table.Columns.Add("UserId").DataType = typeof(Int32);
-            table.Columns.Add("Rating").DataType = typeof(Int32);
-            table.Columns.Add("Review").DataType = typeof(string);
-            table.Columns.Add("Islike").DataType = typeof(bool);
-            foreach (var data in list)
-            {
-                table.Rows.Add(data.productID, data.UserId, data.Rating, data.Review, data.isLike);
-            }
-            table.Rows.Add(16,10,5,"Nice",true);
-            table.Rows.Add(17, 10, 3, "Avg", true);
-            table.Rows.Add(18, 10, 4, "Good", true);
-            table.Rows.Add(19, 10, 1, "Bad", false);
-            table.Rows.Add(20, 10, 4, "Good", true);
-            foreach (var item in table.AsEnumerable())
-            {
-                Console.WriteLine(item.Field<int>("ProductId") + " " + item.Field<int>("UserID") + " " + item.Field<int>("Rating") + " " + item.Field<string>("Review") + " " + item.Field<bool>("isLike"));
-            }
-
-            var result = list.Where(x => x.UserId == 10);
+            list.Add(new product(){productID = 16,UserId = 10,Rating = 3,Review = "Avg",isLike = true});
+            list.Add(new product() { productID = 17, UserId = 10, Rating = 5, Review = "Nice", isLike = true });
+            list.Add(new product() { productID = 18, UserId = 10, Rating = 4, Review = "Good", isLike = true });
+            list.Add(new product() { productID = 19, UserId = 10, Rating = 1, Review = "Bad", isLike = false });
+            list.Add(new product() { productID = 20, UserId = 10, Rating = 2, Review = "Bad", isLike = false });
+            var result = list.Where(x => x.UserId == 10).OrderBy(x=>x.Rating);
             Display(result.ToList());
         }
     }
