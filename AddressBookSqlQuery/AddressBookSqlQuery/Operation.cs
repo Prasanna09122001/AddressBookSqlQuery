@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -277,6 +278,82 @@ namespace AddressBookSqlQuery
                 foreach (var data in contacts)
                 {
                     Console.WriteLine(data.State + "-->" + data.count);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+        public void CreateMappingTable()
+        {
+            try
+            {
+                string query = "Create table AddressBookMapping(id int primary key identity(1,1), Contactid int Foreign Key References AddressBookDetails(id), Typeid int Foreign Key References Type(id));";
+                SqlCommand cmd = new SqlCommand(query, con);
+                con.Open();
+                cmd.ExecuteNonQuery();
+                Console.WriteLine("Table Created Sucessfully");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("There is no Table created " + ex);
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+        public void AddMappingValues(Contact contact)
+        {
+            try
+            {
+                SqlCommand com = new SqlCommand("AddMappingValues", con);
+                com.CommandType = CommandType.StoredProcedure;
+                com.Parameters.AddWithValue("@Contactid", contact.Id);
+                com.Parameters.AddWithValue("@Typeid", contact.Typeid);
+                con.Open();
+                com.ExecuteNonQuery();
+                Console.WriteLine("Contact Added");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+        public void CountByType()
+        {
+            try
+            {
+                SqlCommand com = new SqlCommand("CountByType", con);
+                com.CommandType = CommandType.StoredProcedure;
+                SqlDataAdapter da = new SqlDataAdapter(com);
+                List<Contact> contacts = new List<Contact>();
+                DataTable dt = new DataTable();
+                con.Open();
+                da.Fill(dt);
+                con.Close();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    contacts.Add(
+                        new Contact
+                        {
+                            Id = Convert.ToInt32(dr["Typeid"]),
+                            count = Convert.ToInt32(dr["count"])
+                        });
+                }
+                Console.WriteLine("The No of persons in the Each Type are ");
+                foreach (var data in contacts)
+                {
+                    Console.WriteLine(data.Id + "-->" + data.count);
                 }
             }
             catch (Exception ex)
