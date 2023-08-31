@@ -74,13 +74,19 @@ namespace ProductReviewManagement
         }
         public void RetreiveisLikeMethodisTrue(List<product> list)
         {
-            var result = list.Where(x => x.isLike == true);
-            Display(result.ToList());
+            /*var result = list.Where(x => x.isLike == true);
+            Display(result.ToList());*/
+            var result = table.AsEnumerable().Where(x => x.Field<bool>("IsLike").Equals(true));
+            foreach (var item in result.AsEnumerable())
+            {
+                Console.WriteLine(item.Field<int>("ProductId") + " " + item.Field<int>("UserID") + " " + item.Field<int>("Rating") + " " + item.Field<string>("Review") + " " + item.Field<bool>("isLike"));
+            }
+
         }
         public void RetreiveRatingisAvg(List<product> list)
         {
-            var result = list.Where(x => x.Review == "Avg");
-            Display(result.ToList());
+            var result = list.Average(x => x.Rating);
+            Console.WriteLine(result);
         }
         public void RetreiveDataReviewisNice(List<product> list)
         {
