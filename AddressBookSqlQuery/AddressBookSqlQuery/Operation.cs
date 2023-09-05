@@ -67,6 +67,7 @@ namespace AddressBookSqlQuery
                 com.Parameters.AddWithValue("@email", contact.Email);
                 con.Open();
                 com.ExecuteNonQuery();
+                con.Close();
                 Console.WriteLine("Contact Added");
             }
             catch (Exception ex)
@@ -364,6 +365,34 @@ namespace AddressBookSqlQuery
             {
                 con.Close();
             }
+        }
+        public void UsingwithThread(List<Contact> list)
+        { 
+            DateTime start = DateTime.Now;
+            foreach (var data in list)
+            {
+                Task thread = new Task(
+                () =>
+                {
+                    Console.WriteLine("Being Added" + data.FirstName);
+                    AddDetails(data);
+                    Console.WriteLine("Added" + data.FirstName);
+                });
+                AddDetails(data);
+            }
+            DateTime end = DateTime.Now;
+            Console.WriteLine("Duration with Thread " + (end - start));
+        }
+        public void UsingWithoutThread(List<Contact> list)
+        {
+            DateTime start = DateTime.Now;
+            foreach (var data in list)
+            {
+                AddDetails (data);
+            }
+            DateTime end = DateTime.Now;
+
+            Console.WriteLine("Duration without Thread " + (end - start));
         }
     }
 }
