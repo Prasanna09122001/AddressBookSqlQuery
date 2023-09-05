@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -395,5 +396,40 @@ namespace AddressBookSqlQuery
 
             Console.WriteLine("Duration without Thread " + (end - start));
         }
+        public void GetAllDetails()
+        {
+            List<Contact> details = new List<Contact>();
+            SqlCommand com = new SqlCommand("GetAllDetails", con);
+            com.CommandType = CommandType.StoredProcedure;
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataTable dt = new DataTable();
+            con.Open();
+            da.Fill(dt);
+            con.Close();
+            foreach (DataRow dr in dt.Rows)
+            {
+                details.Add(
+                   new Contact
+                   {
+                       Id = Convert.ToInt32(dr["id"]),
+                       FirstName = Convert.ToString(dr["firstName"]),
+                       LastName = Convert.ToString(dr["lastName"]),
+                       Address = Convert.ToString(dr["address"]),
+                       City = Convert.ToString(dr["city"]),
+                       State = Convert.ToString(dr["state"]),
+                       Email = Convert.ToString(dr["email"]),
+                       Zip = Convert.ToInt32(dr["zip"]),
+                       PhoneNumber = Convert.ToString(dr["phonenumber"])
+                   }
+                   );
+            }
+            foreach (var data in details)
+            {
+                Console.WriteLine(data.Id + " " + data.FirstName + " " + data.LastName + " " + data.Address + " " + data.City + " " + data.State + " " + data.Zip + " " + data.PhoneNumber + " " + data.Email);
+            }
+            var json = JsonConvert.SerializeObject(details);
+            File.WriteAllText(@"D:\Bridgelabz Statement\AddressBookSqlQuery\AddressBookSqlQuery\AddressBookSqlQuery\AddressBookSqlQuery\ContactDetails.json", json);
+        }
+
     }
 }
