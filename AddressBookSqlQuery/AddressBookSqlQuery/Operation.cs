@@ -378,7 +378,8 @@ namespace AddressBookSqlQuery
                     AddDetails(data);
                     Console.WriteLine("Added" + data.FirstName);
                 });
-                AddDetails(data);
+                thread.Start();
+                thread.Wait();
             }
             DateTime end = DateTime.Now;
             Console.WriteLine("Duration with Thread " + (end - start));
