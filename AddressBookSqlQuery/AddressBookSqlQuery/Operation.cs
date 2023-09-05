@@ -430,5 +430,6 @@ namespace AddressBookSqlQuery
             var json = JsonConvert.SerializeObject(details);
             File.WriteAllText(@"D:\Bridgelabz Statement\AddressBookSqlQuery\AddressBookSqlQuery\AddressBookSqlQuery\AddressBookSqlQuery\ContactDetails.json", json);
         }
+
     }
 }

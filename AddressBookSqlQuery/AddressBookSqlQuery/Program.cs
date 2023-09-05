@@ -35,7 +35,9 @@ namespace AddressBookSqlQuery
             //operation.AddMappingValues(MappingDetails);
             //operation.CountByType();
 
+
             operation.GetAllDetails();
+
             List<Contact> list = new List<Contact>();
             list.Add(new Contact()
             {
@@ -93,8 +95,10 @@ namespace AddressBookSqlQuery
                 PhoneNumber = "7898654356",
                 Email = "E@gmail.com"
             });
-          //  operation.UsingWithoutThread(list);
-          //  operation.UsingwithThread(list);
+
+            operation.UsingWithoutThread(list);
+            operation.UsingwithThread(list);
+
             
         }
     }
