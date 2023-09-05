@@ -74,4 +74,22 @@ Insert into Type Values('Friends');
 Insert into Type Values('Profession');
 Insert into Type Values('Others');
 
-select * from Type;
+select * from Type
+
+create Procedure AddMappingValues(
+@Contactid int,
+@Typeid int
+)
+As
+Begin
+Insert into AddressBookMapping values(@Contactid,@Typeid)
+End
+
+Create Procedure CountByType
+As
+Begin
+Select Typeid, count(*)as count from AddressBookMapping group by Typeid 
+End
+
+Select * from AddressBookMapping
+select * from Type
